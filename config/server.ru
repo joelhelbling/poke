@@ -5,11 +5,14 @@ Dotenv.load
 
 require 'leveldb'
 require 'rack'
-require 'poke'
+require 'poke/stash'
+require 'poke/about'
 
 if ENV['RACK_ENV'] == 'development'
   require 'pry'
 end
 
+use Poke::About
+
 datastore = LevelDB::DB.new ENV['LEVELDB_STORE']
-run Poke.new( datastore: datastore )
+run Poke::Stash.new( datastore: datastore )
