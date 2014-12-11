@@ -10,6 +10,7 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
     rack (1.5.2)
+    rake (10.1.0)
     slop (3.6.0)
     thin (1.6.3)
       daemons (~> 1.0, >= 1.0.9)
@@ -22,4 +23,5 @@ PLATFORMS
 DEPENDENCIES
   pry
   rack
+  rake
   thin

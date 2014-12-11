@@ -3,5 +3,4 @@ environment: development
 port: 9995
 daemonize: false
 log: ./tmp/thin.log
-pid: ./tmp/thin.pid
 rackup: ./config/server.ru
