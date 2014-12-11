@@ -1,14 +1,3 @@
-
-# TODO:
-# - back STORE with durable storage (disk, nosql, kyoto)
-# - default expiration of records to (whichever comes first):
-#   - 60 minutes
-#   - first retrieval
-# - accept an authorized token header which unlocks custom functionality
-# - when a POST presents an auth token, it may also set headers for:
-#   - n where: expire record on datetime n (up to one year, date/times in UTC)
-#   - n where: delete after n retrievals
-
 class Poke
 
   STORE = {}
