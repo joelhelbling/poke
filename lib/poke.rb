@@ -1,22 +1,26 @@
+require 'json'
+
 class Poke
 
-  STORE = {}
+  def initialize(datastore: {})
+    @store = datastore
+  end
 
   def call(env)
     key = key_from env
 
     case env['REQUEST_METHOD']
     when 'GET'
-      item = STORE[key]
+      item = JSON.parse @store[key]
       if item
-        render content_type: item[:content_type], content: item[:content]
+        render content_type: item['content_type'], content: item['content']
       else
         render status: 404
       end
     when 'POST'
-      STORE[key] = {
+      @store[key] = {
         content_type:  env['CONTENT_TYPE'],
-        content:       env['rack.input'].readlines }
+        content:       env['rack.input'].readlines }.to_json
       render status: 201
     else
       render status: 401

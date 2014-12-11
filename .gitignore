@@ -1,2 +1,3 @@
 config/thin.yml
 tmp/*
+.env
