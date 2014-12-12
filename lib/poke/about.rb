@@ -1,13 +1,20 @@
 module Poke
-  class About
+  class About < Base
+
     WATCHED_PATHS = %w{ / /about }
+
     def initialize(app)
       @app = app
     end
 
     def call(env)
-      if env['REQUEST_METHOD'] == 'GET' && WATCHED_PATHS.include?(env['PATH_INFO'])
-        [ 200, { "Content-Type" => "text/html" }, ["Poking about?"] ]
+      if WATCHED_PATHS.include?(key_from env)
+        case method_from(env)
+        when 'GET'
+          render content: "Poking about?"
+        else
+          render status: :not_allowed
+        end
       else
         @app.call env
       end

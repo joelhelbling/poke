@@ -1,7 +1,7 @@
 require 'json'
 
 module Poke
-  class Stash
+  class Stash < Base
 
     def initialize(datastore: {})
       @store = datastore
@@ -10,32 +10,22 @@ module Poke
     def call(env)
       key = key_from env
 
-      case env['REQUEST_METHOD']
+      case method_from(env)
       when 'GET'
-        item = JSON.parse @store[key]
-        if item
+        if serialized_item = @store[key]
+          item = JSON.parse serialized_item
           render content_type: item['content_type'], content: item['content']
         else
-          render status: 404
+          render status: :not_found
         end
       when 'POST'
         @store[key] = {
           content_type:  env['CONTENT_TYPE'],
           content:       env['rack.input'].readlines }.to_json
-        render status: 201
+        render status: :created
       else
-        render status: 401
+        render status: :not_allowed
       end
-    end
-
-    private
-
-    def key_from(env)
-      env['PATH_INFO']
-    end
-
-    def render(status: 200, content_type: "text/html", content: [])
-      [ status, {"Content-Type" => content_type}, content ]
     end
 
   end

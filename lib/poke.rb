@@ -3,6 +3,7 @@ Dotenv.load
 
 require 'rack'
 require 'leveldb'
+require 'poke/base'
 require 'poke/stash'
 require 'poke/about'
 

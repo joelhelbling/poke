@@ -12,5 +12,13 @@ namespace :thin do
   end
 end
 
+namespace :env do
+  namespace :hydrate do
+    desc "hydrate configs for development environment"
+    task :development do
+      sh "cp config/thin.yml.development config/thin.yml"
+    end
+  end
+end
 task default: :"thin:start"
 
