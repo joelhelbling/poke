@@ -4,6 +4,7 @@ module Poke
     STATUS_MAP = {
       ok:           200,
       created:      201,
+      forbidden:    403,
       not_found:    404,
       not_allowed:  405
     }

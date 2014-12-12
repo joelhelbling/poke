@@ -19,10 +19,14 @@ module Poke
           render status: :not_found
         end
       when 'POST'
-        @store[key] = {
-          content_type:  env['CONTENT_TYPE'],
-          content:       env['rack.input'].readlines }.to_json
-        render status: :created
+        if @store[key]
+          render status: :forbidden
+        else
+          @store[key] = {
+            content_type:  env['CONTENT_TYPE'],
+            content:       env['rack.input'].readlines }.to_json
+          render status: :created
+        end
       else
         render status: :not_allowed
       end
