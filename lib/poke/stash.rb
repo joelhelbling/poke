@@ -3,7 +3,7 @@ require 'json'
 module Poke
   class Stash < Base
 
-    def initialize(datastore: {})
+    def initialize(datastore: Store.new)
       @store = datastore
     end
 

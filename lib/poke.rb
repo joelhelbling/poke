@@ -3,6 +3,7 @@ Dotenv.load
 
 require 'rack'
 require 'leveldb'
+require 'poke/store'
 require 'poke/base'
 require 'poke/stash'
 require 'poke/about'
@@ -10,10 +11,7 @@ require 'poke/about'
 module Poke
 
   def self.app
-    Poke::Stash.new( datastore: Poke.datastore )
+    Poke::Stash.new
   end
 
-  def self.datastore
-    LevelDB::DB.new ENV['LEVELDB_STORE']
-  end
 end
