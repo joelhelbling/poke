@@ -5,15 +5,15 @@ module Poke
     def [] key
       if item = store[key]
         begin
-          JSON.parse item
-        rescue JSON::ParserError
-          { 'content_type' => 'text/plain', 'content' => [ item ] }
+          Marshal.restore item
+        rescue TypeError
+          { content_type: 'text/plain', content: [ item ] }
         end
       end
     end
 
     def []= key, value
-      store[key] = value.to_json
+      store[key] = Marshal.dump value
     end
 
     def exists? key

@@ -13,8 +13,8 @@ describe Poke::Stash do
     }
   end
   Given(:item) do
-    { 'content_type' => 'test/plain',
-      'content'      => [ content ]
+    { content_type: 'test/plain',
+      content:      [ content ]
     }
   end
 
@@ -45,7 +45,7 @@ describe Poke::Stash do
     context 'item is in datastore' do
       Given { store[path] = item }
       Given { env['rack.input']   = StringIO.new 'some other content' }
-      Then  { store[path]['content'] == [ content ] }
+      Then  { store[path][:content] == [ content ] }
       Then  { result.first == status.forbidden }
     end
   end
