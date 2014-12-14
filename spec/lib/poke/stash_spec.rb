@@ -12,10 +12,10 @@ describe Poke::Stash do
       'REQUEST_METHOD' => method
     }
   end
-  Given(:json_item) do
-    { content_type: 'text/html',
-      content:      [ content ]
-    }.to_json
+  Given(:item) do
+    { 'content_type' => 'test/plain',
+      'content'      => [ content ]
+    }
   end
 
   When(:result) { stash.call env }
@@ -23,29 +23,29 @@ describe Poke::Stash do
   describe 'GET' do
     Given(:method) { 'GET' }
 
-    context "item not in datastore" do
+    context 'item not in datastore' do
       Then { result.first == status.not_found }
     end
 
-    context "item IS in datastore" do
-      Given { store[path] = json_item }
-      Then { result == [ status.ok, { "Content-Type" => "text/html" }, [ content ] ] }
+    context 'item IS in datastore' do
+      Given { store[path] = item }
+      Then { result == [ status.ok, { 'Content-Type' => 'test/plain' }, [ content ] ] }
     end
   end
 
   describe 'POST' do
     Given(:method) { 'POST' }
-    Given { env['CONTENT_TYPE'] = 'text/html' }
+    Given { env['CONTENT_TYPE'] = 'test/plain' }
 
-    context "item not in datastore" do
+    context 'item not in datastore' do
       Given { env['rack.input']   = StringIO.new content }
-      Then  { store[path] == json_item }
+      Then  { store[path] == item }
     end
 
-    context "item is in datastore" do
-      Given { store[path] = json_item }
+    context 'item is in datastore' do
+      Given { store[path] = item }
       Given { env['rack.input']   = StringIO.new 'some other content' }
-      Then  { JSON.parse(store[path])['content'] == [ content ] }
+      Then  { store[path]['content'] == [ content ] }
       Then  { result.first == status.forbidden }
     end
   end

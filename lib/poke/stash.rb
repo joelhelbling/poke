@@ -12,8 +12,7 @@ module Poke
 
       case method_from(env)
       when 'GET'
-        if serialized_item = @store[key]
-          item = JSON.parse serialized_item
+        if item = @store[key]
           render content_type: item['content_type'], content: item['content']
         else
           render status: :not_found
@@ -23,8 +22,8 @@ module Poke
           render status: :forbidden
         else
           @store[key] = {
-            content_type:  env['CONTENT_TYPE'],
-            content:       env['rack.input'].readlines }.to_json
+            'content_type' => env['CONTENT_TYPE'],
+            'content'      => env['rack.input'].readlines }
           render status: :created
         end
       else

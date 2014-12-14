@@ -3,11 +3,17 @@ module Poke
     STORE = ENV['LEVELDB_STORE']
 
     def [] key
-      store[key]
+      if item = store[key]
+        begin
+          JSON.parse item
+        rescue JSON::ParserError
+          { 'content_type' => 'text/plain', 'content' => [ item ] }
+        end
+      end
     end
 
     def []= key, value
-      store[key] = value
+      store[key] = value.to_json
     end
 
     def exists? key
