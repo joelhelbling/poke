@@ -21,8 +21,13 @@ describe TokenChain do
 
     describe 'generates multiple tokens' do
       When(:result) { chain.generate(3) }
-      Then { result == third_code }
-      Then { chain.codes == [ first_code, second_code, third_code ] }
+      Then { result == [ first_code, second_code, third_code ] }
+    end
+
+    describe 'return just the generated tokens' do
+      When { chain.generate }
+      When(:result) { chain.generate(2) }
+      Then { result == [ second_code, third_code ] }
     end
   end
 
@@ -39,8 +44,7 @@ describe TokenChain do
 
     describe 'generates multiple tokens' do
       When(:result) { chain.generate(2) }
-      Then { result == fifth_code }
-      Then { chain.codes == [ fourth_code, fifth_code ] }
+      Then { result == [ fourth_code, fifth_code ] }
     end
   end
 
