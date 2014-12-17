@@ -1,5 +1,3 @@
-require 'json'
-
 module Poke
   class Stash < Base
 

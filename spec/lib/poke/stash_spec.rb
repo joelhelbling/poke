@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'poke/stash'
 
 describe Poke::Stash do
   Given(:status)  { OpenStruct.new Poke::Base::STATUS_MAP }

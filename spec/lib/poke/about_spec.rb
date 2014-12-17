@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'poke/about'
 
 describe Poke::About do
   Given(:status) { OpenStruct.new Poke::Base::STATUS_MAP }

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'token_chain'
 
 describe TokenChain do
   Given(:anchor)      { double anchor_code: anchor_code      }

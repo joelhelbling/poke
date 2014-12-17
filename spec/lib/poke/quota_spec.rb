@@ -12,7 +12,7 @@ class Poke::Quota
   end
 end
 
-describe Poke::AuthChain do
+describe Poke::Quota do
 
   context "sending first valid unused code" do
     Then { :success }

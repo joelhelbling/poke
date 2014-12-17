@@ -7,6 +7,7 @@ require 'poke/store'
 require 'poke/base'
 require 'poke/stash'
 require 'poke/about'
+require 'poke/quota'
 
 module Poke
 

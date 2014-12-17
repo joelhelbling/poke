@@ -1,3 +1,5 @@
+require 'poke/base'
+
 module Poke
   class About < Base
 
