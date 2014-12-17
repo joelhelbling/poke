@@ -3,8 +3,8 @@ require 'digest/sha2'
 class TokenChain
   attr_reader :codes
 
-  def initialize(anchor, last_code=nil)
-    @anchor = anchor
+  def initialize(anchor_code, last_code=nil)
+    @anchor_code = anchor_code
     @last_code = last_code
     @codes = []
   end
@@ -12,8 +12,8 @@ class TokenChain
   def generate(number=1)
     generated_codes = []
     number.times do
-      part_one = @codes.last || @last_code || @anchor.anchor_code
-      part_two = @anchor.anchor_code
+      part_one = @codes.last || @last_code || @anchor_code
+      part_two = @anchor_code
       code = sha.digest("#{part_one}#{part_two}")
       @codes << code
       generated_codes << code

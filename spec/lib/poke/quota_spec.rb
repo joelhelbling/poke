@@ -1,29 +1,73 @@
 require 'spec_helper'
-
-class Poke::Quota
-
-  def initialize(anchor, available_codes={})
-    @app = app
-    @db = LevelDB::DB.new ENV['LEVELDB_QUOTA']
-  end
-
-  def call(env)
-
-  end
-end
+require 'poke/quota'
+require 'token_chain'
+require 'digest/sha2'
 
 describe Poke::Quota do
 
-  context "sending first valid unused code" do
-    Then { :success }
+  Given(:sha)         { Digest::SHA256.new                        }
+  Given(:passphrase)  { 'the rain in spain'                       }
+  Given(:second_seed) { sha.base64digest passphrase               }
+  Given(:anchor_code) { sha.base64digest second_seed + passphrase }
+  Given(:chain)       { TokenChain.new anchor_code                }
+  Given(:first_code)  { chain.generate                            }
+
+  #storage
+  Given(:anchor_store) do
+    {
+      anchor_code: anchor_code,
+      second_seed: second_seed,
+      quota: { expire_in_hours: 24, delete_after_accesses: 3 }
+    }
   end
-  context "sending second valid unused code" do
-    Then { :success_with_index_of_first_skipped }
+  Given(:codes_store) do
+    {
+      first_code => {
+        predecessor:  anchor_code,
+        anchor_code:  anchor_code,
+        sequence:     1,
+        accessed:     nil
+      }
+    }
   end
-  context "sending valid but used code" do
-    Then { :fail_with_index_of_next_valid }
+  Given(:item_meta_store) { {} }
+
+  # setup middleware
+  Given(:app)   { double }
+  Given(:quota) { Poke::Quota.new app }
+  Given(:env) do
+    {
+      'PATH_INFO'      => '/el/stuff',
+      'REQUEST_METHOD' => method
+    }
   end
-  context "sending first anchor code" do
-    Then { :fail_with_index_of_next_valid }
+
+  When(:result) { quota.call env }
+
+  context 'GET' do
+    Given(:method) { 'GET' }
+
+    Given { expect(app).to receive(:call).with(env) }
+    Then  { item_meta_store == {} }
+    Then  { not codes_store[first_code][:accessed] }
+  end
+
+  context 'POST' do
+    Given(:method) { 'POST' }
+    Given(:content) { 'Hello World' }
+    Given { env['rack.input'] = StringIO.new content }
+
+    context 'no Authorization provided'
+
+    context 'invalid token chain' do
+      Given { 'merge bogus Authorization header into env...' }
+
+    end
+
+    context 'valid token chain' do
+      Given { 'merge valid Authorization header into env...' }
+
+    end
+
   end
 end

@@ -2,8 +2,6 @@ require 'spec_helper'
 require 'token_chain'
 
 describe TokenChain do
-  Given(:anchor)      { double anchor_code: anchor_code      }
-
   Given(:sha)         { Digest::SHA256.new                   }
   Given(:passphrase)  { 'the rain in spain'                  }
   Given(:second_seed) { sha.digest passphrase                }
@@ -13,7 +11,7 @@ describe TokenChain do
   Given(:third_code)  { sha.digest second_code + anchor_code }
 
   context 'anchor with no last code' do
-    Given(:chain) { described_class.new anchor }
+    Given(:chain) { described_class.new anchor_code }
 
     describe 'generates a token' do
       When(:result) { chain.generate }
@@ -36,7 +34,7 @@ describe TokenChain do
     Given(:last_code)   { third_code }
     Given(:fourth_code) { sha.digest third_code  + anchor_code  }
     Given(:fifth_code)  { sha.digest fourth_code + anchor_code  }
-    Given(:chain)       { described_class.new anchor, last_code }
+    Given(:chain)       { described_class.new anchor_code, last_code }
 
     describe 'generates a token' do
       When(:result) { chain.generate }
