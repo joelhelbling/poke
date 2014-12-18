@@ -1,3 +1,5 @@
+require 'poke/base'
+
 # A rack middleware which sets the lifespan of incoming items.
 # It always allows the items through.  But for any items for
 # which it cannot resolve a token chain, it gets the minimum
@@ -7,8 +9,9 @@
 # use a token chain; not only will their items expire quickly
 # but we should probably cap them at x posts per hour.
 module Poke
-  class Quota
+  class Quota < Base
 
+    DEFAULT_EXPIRE_MINUTES = 60
     def initialize app, anchor_store: {}, codes_store: {}, item_meta_store: {}
       @app             = app
       @anchor_store    = anchor_store
@@ -17,7 +20,7 @@ module Poke
     end
 
     def call env
-      case env['REQUEST_METHOD']
+      case method_from(env)
       when 'POST'
         process_quota env
       else
@@ -25,24 +28,30 @@ module Poke
       end
     end
 
-    def process_quota env
-      # ensure no spoofed quota is present in ENV['HEADERS']
-      #   -- we don't have to embed this in headers.  We can set
-      #      arbitrary fields in the env.  Furthermore, because
-      #      we can confirm the write went ok, we can simply
-      #      write the quota meta information afterwards, as
-      #      the response is on its way back out.
-      #
-      # if anchor = resolve token chain
-      #   quota from anchor
-      # else
-      #   minimum quota
-      #
-      # write quota to item meta info
-      # append quota response to content
+    private
 
+    def process_quota env
       status, headers, content = @app.call env
+
+      if status == status_code(:created)
+        expire_minutes = DEFAULT_EXPIRE_MINUTES
+        auth_token = env['HTTP_AUTHORIZATION']
+
+        if auth = auth_token && @codes_store[ auth_token ]
+          expire_minutes = @anchor_store[ auth[:anchor_code] ][:quota][:expire_in_minutes]
+          auth[:accessed] ||= true
+          @codes_store[ auth_token ] = auth
+        end
+
+        expire_time = expire_in_minutes(expire_minutes)
+        @item_meta_store[key_from env] = { expires_at: expire_time }
+        content << "\nItem will expire at #{expire_time.utc}"
+      end
       [ status, headers, content ]
+    end
+
+    def expire_in_minutes minutes
+      Time.now + minutes * 60
     end
   end
 end

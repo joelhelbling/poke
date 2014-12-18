@@ -16,13 +16,13 @@ module Poke
           render status: :not_found
         end
       when 'POST'
-        if @store[key]
+        if @store.has_key? key
           render status: :forbidden
         else
           @store[key] = {
             content_type: env['CONTENT_TYPE'],
             content:      env['rack.input'].readlines }
-          render status: :created
+          render status: :created, content: [ "\nItem \"#{key_from env}\" saved successfully." ]
         end
       else
         render status: :not_allowed

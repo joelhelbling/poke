@@ -2,13 +2,13 @@ require 'spec_helper'
 require 'token_chain'
 
 describe TokenChain do
-  Given(:sha)         { Digest::SHA256.new                   }
-  Given(:passphrase)  { 'the rain in spain'                  }
-  Given(:second_seed) { sha.digest passphrase                }
-  Given(:anchor_code) { sha.digest second_seed + passphrase  }
-  Given(:first_code)  { sha.digest anchor_code + anchor_code }
-  Given(:second_code) { sha.digest first_code  + anchor_code }
-  Given(:third_code)  { sha.digest second_code + anchor_code }
+  Given(:sha)         { Digest::SHA256.new                         }
+  Given(:passphrase)  { 'the rain in spain'                        }
+  Given(:second_seed) { sha.base64digest passphrase                }
+  Given(:anchor_code) { sha.base64digest second_seed + passphrase  }
+  Given(:first_code)  { sha.base64digest anchor_code + anchor_code }
+  Given(:second_code) { sha.base64digest first_code  + anchor_code }
+  Given(:third_code)  { sha.base64digest second_code + anchor_code }
 
   context 'anchor with no last code' do
     Given(:chain) { described_class.new anchor_code }
@@ -31,9 +31,9 @@ describe TokenChain do
   end
 
   context 'anchor with a last code' do
-    Given(:last_code)   { third_code }
-    Given(:fourth_code) { sha.digest third_code  + anchor_code  }
-    Given(:fifth_code)  { sha.digest fourth_code + anchor_code  }
+    Given(:last_code)   { third_code                                 }
+    Given(:fourth_code) { sha.base64digest third_code  + anchor_code }
+    Given(:fifth_code)  { sha.base64digest fourth_code + anchor_code }
     Given(:chain)       { described_class.new anchor_code, last_code }
 
     describe 'generates a token' do

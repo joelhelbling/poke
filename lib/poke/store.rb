@@ -16,9 +16,12 @@ module Poke
       store[key] = Marshal.dump value
     end
 
-    def exists? key
+    def has_key? key
       store.exists? key
     end
+    alias_method :key?,      :has_key?
+    alias_method :include?,  :has_key?
+    alias_method :member?,   :has_key?
 
     def keys
       store.keys

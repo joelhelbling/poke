@@ -7,4 +7,5 @@ end
 require 'poke'
 
 use Poke::About
+use Poke::Quota, anchor_store: {}, codes_store: {}, item_meta_store: {}
 run Poke.app

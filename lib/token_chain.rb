@@ -14,7 +14,7 @@ class TokenChain
     number.times do
       part_one = @codes.last || @last_code || @anchor_code
       part_two = @anchor_code
-      code = sha.digest("#{part_one}#{part_two}")
+      code = sha.base64digest("#{part_one}#{part_two}")
       @codes << code
       generated_codes << code
     end
