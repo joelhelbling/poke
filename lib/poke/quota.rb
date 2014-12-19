@@ -15,11 +15,11 @@ module Poke
 
     DEFAULT_EXPIRE_MINUTES = 60
 
-    def initialize app, anchor_store: {}, codes_store: {}, item_meta_store: {}
+    def initialize app
       @app             = app
-      @anchor_store    = anchor_store
-      @codes_store     = codes_store
-      @item_meta_store = item_meta_store
+      @anchor_store    = TokenAnchorStore.new
+      @codes_store     = TokenChainStore.new
+      @item_meta_store = ItemMetaStore.new
     end
 
     def call env

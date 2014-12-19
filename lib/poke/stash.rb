@@ -1,8 +1,8 @@
 require 'leveldb'
+require 'poke/base'
 require 'poke/store'
 
 module Poke
-
   class Stash < Base
 
     def initialize(datastore: ItemStore.new)

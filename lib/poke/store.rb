@@ -29,6 +29,10 @@ module Poke
     alias_method :includes?, :has_key?
     alias_method :member?,   :has_key?
 
+    def none?
+      store.none?
+    end
+
     def keys
       store.keys
     end
