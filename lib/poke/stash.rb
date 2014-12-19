@@ -1,7 +1,11 @@
+require 'leveldb'
+require 'poke/store'
+
 module Poke
+
   class Stash < Base
 
-    def initialize(datastore: Store.new)
+    def initialize(datastore: ItemStore.new)
       @store = datastore
     end
 
@@ -30,4 +34,11 @@ module Poke
     end
 
   end
+
+  class ItemStore < Store
+    def handle_unmarshal_error item
+      { content_type: 'text/plain', content: [ item ] }
+    end
+  end
+
 end

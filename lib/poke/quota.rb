@@ -1,4 +1,5 @@
 require 'poke/base'
+require 'poke/store'
 
 # A rack middleware which sets the lifespan of incoming items.
 # It always allows the items through.  But for any items for
@@ -8,10 +9,12 @@ require 'poke/base'
 # It might also be good if this guy tracked IP's which didn't
 # use a token chain; not only will their items expire quickly
 # but we should probably cap them at x posts per hour.
+
 module Poke
   class Quota < Base
 
     DEFAULT_EXPIRE_MINUTES = 60
+
     def initialize app, anchor_store: {}, codes_store: {}, item_meta_store: {}
       @app             = app
       @anchor_store    = anchor_store
@@ -54,4 +57,9 @@ module Poke
       Time.now + minutes * 60
     end
   end
+
+  class ItemMetaStore < Store; end
+  class TokenChainStore < Store; end
+  class TokenAnchorStore < Store; end
+
 end

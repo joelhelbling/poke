@@ -1,13 +1,19 @@
 module Poke
   class Store
-    STORE = ENV['LEVELDB_STORE']
+    class << self
+      attr_accessor :datastore
+    end
+
+    def store
+      self.class.datastore
+    end
 
     def [] key
       if item = store[key]
         begin
           Marshal.restore item
         rescue TypeError
-          { content_type: 'text/plain', content: [ item ] }
+          handle_unmarshal_error item
         end
       end
     end
@@ -17,18 +23,19 @@ module Poke
     end
 
     def has_key? key
-      store.exists? key
+      store.has_key? key
     end
     alias_method :key?,      :has_key?
-    alias_method :include?,  :has_key?
+    alias_method :includes?, :has_key?
     alias_method :member?,   :has_key?
 
     def keys
       store.keys
     end
 
-    def store
-      @@store ||= LevelDB::DB.new STORE
+    def handle_unmarshal_error item
+      raise "Looks like we need a #handle_unmarshal_error method for #{self}"
     end
+
   end
 end

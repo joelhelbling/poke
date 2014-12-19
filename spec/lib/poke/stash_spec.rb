@@ -5,7 +5,8 @@ describe Poke::Stash do
   Given(:status)  { OpenStruct.new Poke::Base::STATUS_MAP }
   Given(:store)   { {} }
   Given(:content) { 'some content' }
-  Given(:stash)   { described_class.new datastore: store }
+  Given { Poke::ItemStore.datastore = store }
+  Given(:stash)   { described_class.new }
   Given(:path)    { '/abc123' }
   Given(:env) do
     {
@@ -29,7 +30,7 @@ describe Poke::Stash do
     end
 
     context 'item IS in datastore' do
-      Given { store[path] = item }
+      Given { store[path] = Marshal.dump(item) }
       Then { result == [ status.ok, { 'Content-Type' => 'test/plain' }, [ content ] ] }
     end
   end
@@ -40,7 +41,7 @@ describe Poke::Stash do
 
     context 'item not in datastore' do
       Given { env['rack.input']   = StringIO.new content }
-      Then  { store[path] == item }
+      Then  { store[path] == Marshal.dump(item) }
     end
 
     context 'item is in datastore' do
