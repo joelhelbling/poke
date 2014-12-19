@@ -38,7 +38,7 @@ module Poke
     end
 
     def handle_unmarshal_error item
-      raise "Looks like we need a #handle_unmarshal_error method for #{self}"
+      raise "Looks like we need a #handle_unmarshal_error method for #{self.class}"
     end
 
   end

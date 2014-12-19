@@ -15,14 +15,20 @@ module Poke
       req = Rack::Request.new env
 
       if WATCHED_PATHS.include? req.path
-        if req.get?
-          render content: ABOUT_CONTENT
-        else
-          render status: :not_allowed
-        end
+        render_about req
       else
         @app.call req.env
       end
+
     end
+
+    def render_about req
+      if req.get?
+        render content: ABOUT_CONTENT
+      else
+        render status: :not_allowed
+      end
+    end
+
   end
 end

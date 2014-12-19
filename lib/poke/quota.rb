@@ -41,28 +41,32 @@ module Poke
 
       if status == status_code(:created)
         expire_minutes = DEFAULT_EXPIRE_MINUTES
+
         auth_token = req.env['HTTP_AUTHORIZATION']
 
         if auth = auth_token && @codes_store[ auth_token ]
-          expire_minutes = @anchor_store[ auth[:anchor_code] ][:quota][:expire_in_minutes]
+          anchor = @anchor_store[auth[:anchor_code]]
+          expire_minutes = anchor[:quota][:expire_in_minutes]
           auth[:accessed] ||= true
-          @codes_store[ auth_token ] = auth
+          @codes_store[auth_token] = auth
         end
 
-        expire_time = expire_in_minutes(expire_minutes)
+        expire_time = expire_time_from_minutes expire_minutes
+
         @item_meta_store[req.path] = { expires_at: expire_time }
         content << "\nItem will expire at #{expire_time.utc}"
       end
+
       [ status, headers, content ]
     end
 
-    def expire_in_minutes minutes
+    def expire_time_from_minutes minutes
       Time.now + minutes * 60
     end
   end
 
-  class ItemMetaStore < Store; end
-  class TokenChainStore < Store; end
+  class ItemMetaStore    < Store; end
+  class TokenChainStore  < Store; end
   class TokenAnchorStore < Store; end
 
 end
