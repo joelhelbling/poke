@@ -11,14 +11,6 @@ module Poke
 
     private
 
-    def key_from(env)
-      env['PATH_INFO']
-    end
-
-    def method_from(env)
-      env['REQUEST_METHOD']
-    end
-
     def render(status: :ok, content_type: "text/html", content: [])
       [ status_code(status), {"Content-Type" => content_type}, [content].flatten ]
     end

@@ -1,10 +1,11 @@
+require 'rack/request'
 require 'poke/base'
 require 'poke/store'
 
 # A rack middleware which sets the lifespan of incoming items.
 # It always allows the items through.  But for any items for
-# which it cannot resolve a token chain, it gets the minimum
-# lifespan (TBD minutes).
+# which it cannot resolve a token chain, it assigns the minimum
+# lifespan (DEFAULT_EXPIRE_MINUTES).
 #
 # It might also be good if this guy tracked IP's which didn't
 # use a token chain; not only will their items expire quickly
@@ -23,22 +24,24 @@ module Poke
     end
 
     def call env
-      case method_from(env)
-      when 'POST'
-        process_quota env
+      req = Rack::Request.new env
+
+      case
+      when req.post?
+        process_quota req
       else
-        @app.call env
+        @app.call req.env
       end
     end
 
     private
 
-    def process_quota env
-      status, headers, content = @app.call env
+    def process_quota req
+      status, headers, content = @app.call req.env
 
       if status == status_code(:created)
         expire_minutes = DEFAULT_EXPIRE_MINUTES
-        auth_token = env['HTTP_AUTHORIZATION']
+        auth_token = req.env['HTTP_AUTHORIZATION']
 
         if auth = auth_token && @codes_store[ auth_token ]
           expire_minutes = @anchor_store[ auth[:anchor_code] ][:quota][:expire_in_minutes]
@@ -47,7 +50,7 @@ module Poke
         end
 
         expire_time = expire_in_minutes(expire_minutes)
-        @item_meta_store[key_from env] = { expires_at: expire_time }
+        @item_meta_store[req.path] = { expires_at: expire_time }
         content << "\nItem will expire at #{expire_time.utc}"
       end
       [ status, headers, content ]

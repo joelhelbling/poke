@@ -1,3 +1,4 @@
+require 'rack/request'
 require 'poke/base'
 
 module Poke
@@ -11,15 +12,16 @@ module Poke
     end
 
     def call(env)
-      if WATCHED_PATHS.include?(key_from env)
-        case method_from(env)
-        when 'GET'
+      req = Rack::Request.new env
+
+      if WATCHED_PATHS.include? req.path
+        if req.get?
           render content: ABOUT_CONTENT
         else
           render status: :not_allowed
         end
       else
-        @app.call env
+        @app.call req.env
       end
     end
   end
