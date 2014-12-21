@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 gem 'dotenv'
 gem 'rake'
 gem 'rack'
+gem 'async-rack'
+gem 'squares'
 gem 'thin'
 gem 'leveldb'
 

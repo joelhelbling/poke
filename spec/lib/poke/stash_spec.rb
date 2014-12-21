@@ -3,8 +3,6 @@ require 'poke/stash'
 
 module Poke
   describe Stash do
-    Given           { ItemStore.datastore = {}              }
-    Given(:store)   { ItemStore.new                         }
     Given(:status)  { OpenStruct.new Poke::Base::STATUS_MAP }
     Given(:stash)   { described_class.new                   }
 
@@ -16,10 +14,9 @@ module Poke
         'REQUEST_METHOD' => method
       }
     end
-    Given(:item) do
+    Given(:item_properties) do
       { content_type: 'test/plain',
-        content:      [ content ]
-      }
+        content:      [ content ] }
     end
 
     When(:result) { stash.call env }
@@ -32,7 +29,7 @@ module Poke
       end
 
       context 'item IS in datastore' do
-        Given { store[path] = item }
+        Given { Item[path] = item_properties }
         Then { result == [ status.ok, { 'Content-Type' => 'test/plain' }, [ content ] ] }
       end
     end
@@ -43,13 +40,13 @@ module Poke
 
       context 'item not in datastore' do
         Given { env['rack.input']   = StringIO.new content }
-        Then  { store[path] == item }
+        Then  { Item[path].content == [ content ] }
       end
 
       context 'item is in datastore' do
-        Given { store[path] = item }
+        Given { Item[path] = item_properties }
         Given { env['rack.input']   = StringIO.new 'some other content' }
-        Then  { store[path][:content] == [ content ] }
+        Then  { Item[path].content == [ content ] }
         Then  { result.first == status.forbidden }
       end
     end

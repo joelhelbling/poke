@@ -1,6 +1,9 @@
 require 'rack/request'
 require 'poke/base'
-require 'poke/store'
+require 'poke/quota/garbage_collector'
+require 'models/token_chain_anchor'
+require 'models/token'
+require 'models/item_meta'
 
 # A rack middleware which sets the lifespan of incoming items.
 # It always allows the items through.  But for any items for
@@ -18,9 +21,8 @@ module Poke
 
     def initialize app
       @app             = app
-      @anchor_store    = TokenAnchorStore.new
-      @codes_store     = TokenChainStore.new
-      @item_meta_store = ItemMetaStore.new
+
+      GarbageCollector.run
     end
 
     def call env
@@ -44,16 +46,16 @@ module Poke
 
         auth_token = req.env['HTTP_AUTHORIZATION']
 
-        if auth = auth_token && @codes_store[ auth_token ]
-          anchor = @anchor_store[auth[:anchor_code]]
-          expire_minutes = anchor[:quota][:expire_in_minutes]
-          auth[:accessed] ||= true
-          @codes_store[auth_token] = auth
+        if auth = Token.find(auth_token)
+          anchor = TokenChainAnchor.find auth.anchor_code
+          expire_minutes = anchor.quota_in_minutes
+          auth.accessed = true
+          auth.save
         end
 
         expire_time = expire_time_from_minutes expire_minutes
 
-        @item_meta_store[req.path] = { expires_at: expire_time }
+        ItemMeta.create req.path, expires_at: expire_time
         content << "\nItem will expire at #{expire_time.utc}"
       end
 
@@ -64,9 +66,5 @@ module Poke
       Time.now + minutes * 60
     end
   end
-
-  class ItemMetaStore    < Store; end
-  class TokenChainStore  < Store; end
-  class TokenAnchorStore < Store; end
 
 end

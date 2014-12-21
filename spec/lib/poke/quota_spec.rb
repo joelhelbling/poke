@@ -13,28 +13,16 @@ module Poke
     Given(:chain)       { TokenChain.new anchor_code                }
     Given(:first_code)  { chain.generate                            }
 
-    #storage
     Given do
-      TokenAnchorStore.datastore = {}
-      TokenChainStore.datastore = {}
-      ItemMetaStore.datastore = {}
-    end
-    Given(:anchor_store)    { TokenAnchorStore.new }
-    Given(:codes_store)     { TokenChainStore.new  }
-    Given(:item_meta_store) { ItemMetaStore.new    }
-    Given do
-      anchor_store[anchor_code] = {
+      TokenChainAnchor.create anchor_code,
         second_seed: second_seed,
-        quota: { expire_in_minutes: 24 * 60 }
-      }
+        quota_in_minutes: 24 * 60
     end
     Given do
-      codes_store[first_code] = {
+      Token.create first_code,
         predecessor:  anchor_code,
         anchor_code:  anchor_code,
-        sequence:     1,
-        accessed:     nil
-      }
+        sequence:     1
     end
 
     # setup middleware
@@ -52,9 +40,9 @@ module Poke
     context 'GET' do
       Given(:method) { 'GET' }
 
-      Given { expect(app).to receive(:call).with(env) }
-      Then  { expect(item_meta_store).to be_none      }
-      Then  { not codes_store[first_code][:accessed]  }
+      Given { expect(app).to receive(:call).with(env)      }
+      Then  { expect(ItemMeta.store).to be_none            }
+      Then  { expect(Token[first_code]).to_not be_accessed }
     end
 
     context 'POST' do
@@ -69,21 +57,21 @@ module Poke
       Given { Timecop.freeze time }
 
       context 'no Authorization provided' do
-        Then { item_meta_store['/el/stuff'] == { expires_at: minimum_quota } }
+        Then { ItemMeta['/el/stuff'].expires_at == minimum_quota }
         # Then { expect(result[2]).to include('minimum quota') }
       end
 
       context 'invalid token chain' do
         Given { env['HTTP_AUTHORIZATION'] = 'bogus_code' }
-        Then { item_meta_store['/el/stuff'] == { expires_at: minimum_quota } }
+        Then { ItemMeta['/el/stuff'].expires_at == minimum_quota }
 
       end
 
       context 'valid token chain' do
         Given { env['HTTP_AUTHORIZATION'] = first_code }
 
-        Then { codes_store[first_code][:accessed] == true }
-        Then { item_meta_store['/el/stuff'] == { expires_at: quota_24_hours } }
+        Then { expect(Token[first_code]).to be_accessed }
+        Then { ItemMeta['/el/stuff'].expires_at == quota_24_hours }
       end
 
     end

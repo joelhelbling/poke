@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    async-rack (0.5.1)
+      rack (~> 1.1)
     coderay (1.1.0)
     daemons (1.1.9)
     diff-lcs (1.2.5)
@@ -35,6 +37,7 @@ GEM
     rspec-support (3.1.2)
     slop (3.6.0)
     sorcerer (1.0.2)
+    squares (0.2.3)
     thin (1.6.3)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0)
@@ -45,6 +48,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  async-rack
   dotenv
   leveldb
   pry
@@ -52,5 +56,6 @@ DEPENDENCIES
   rake
   rspec
   rspec-given
+  squares
   thin
   timecop

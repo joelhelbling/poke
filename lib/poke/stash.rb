@@ -1,34 +1,30 @@
 require 'rack/request'
 require 'leveldb'
 require 'poke/base'
-require 'poke/store'
+require 'models/item'
 
 module Poke
   class Stash < Base
 
-    def initialize(datastore: ItemStore.new)
-      @store = datastore
-    end
-
     def call(env)
       req = Rack::Request.new env
-      key = req.path
+      item_id = req.path
 
       case
       when req.get?
-        if item = @store[key]
-          render content_type: item[:content_type], content: item[:content]
+        if item = Item[item_id]
+          render content_type: item.content_type, content: item.content
         else
           render status: :not_found
         end
       when req.post?
-        if @store.has_key? key
+        if Item.has_key? item_id
           render status: :forbidden
         else
-          @store[key] = {
+          Item.create item_id,
             content_type: req.content_type,
-            content:      req.body.readlines }
-          render status: :created, content: [ "\nItem \"#{key}\" saved successfully." ]
+            content:      req.body.readlines
+          render status: :created, content: [ "\nItem \"#{item_id}\" saved successfully." ]
         end
       else
         render status: :not_allowed
@@ -36,11 +32,4 @@ module Poke
     end
 
   end
-
-  class ItemStore < Store
-    def handle_unmarshal_error item
-      { content_type: 'text/plain', content: [ item ] }
-    end
-  end
-
 end

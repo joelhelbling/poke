@@ -4,6 +4,7 @@ if ENV['RACK_ENV'] == 'development'
   require 'pry'
 end
 
+require 'async-rack'
 require 'poke'
 
 use Poke::About
