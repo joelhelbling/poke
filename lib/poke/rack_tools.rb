@@ -11,7 +11,7 @@ module Poke
 
     private
 
-    def render status: :ok, content_type: "text/html", content: []
+    def render status: :ok, content_type: "text/plain", content: []
       [
         status_code(status),
         {"Content-Type" => content_type},
