@@ -1,10 +1,11 @@
 require 'rack/request'
 require 'leveldb'
-require 'poke/base'
+require 'poke/rack_tools'
 require 'models/item'
 
 module Poke
-  class Stash < Base
+  class Stash
+    include RackTools
 
     def call(env)
       req = Rack::Request.new env

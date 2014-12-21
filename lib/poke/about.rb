@@ -1,8 +1,9 @@
 require 'rack/request'
-require 'poke/base'
+require 'poke/rack_tools'
 
 module Poke
-  class About < Base
+  class About
+    include RackTools
 
     WATCHED_PATHS = %w{ / /about }
     ABOUT_CONTENT = "Poking about?"

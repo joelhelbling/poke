@@ -1,5 +1,5 @@
 module Poke
-  class Base
+  module RackTools
 
     STATUS_MAP = {
       ok:           200,

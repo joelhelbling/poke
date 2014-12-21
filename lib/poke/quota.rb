@@ -1,5 +1,5 @@
 require 'rack/request'
-require 'poke/base'
+require 'poke/rack_tools'
 require 'poke/quota/garbage_collector'
 require 'models/token_chain_anchor'
 require 'models/token'
@@ -15,7 +15,8 @@ require 'models/item_meta'
 # but we should probably cap them at x posts per hour.
 
 module Poke
-  class Quota < Base
+  class Quota
+    include RackTools
 
     DEFAULT_EXPIRE_MINUTES = 60
 
