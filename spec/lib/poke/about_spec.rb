@@ -1,10 +1,10 @@
 require 'spec_helper'
 require 'poke/about'
-require 'poke/base'
+require 'poke/rack_tools'
 
 module Poke
   describe About do
-    Given(:status) { OpenStruct.new Base::STATUS_MAP }
+    Given(:status) { OpenStruct.new RackTools::STATUS_MAP }
     Given(:app) { double }
     Given(:about) { described_class.new app }
     Given(:env) do
@@ -36,7 +36,7 @@ module Poke
       context 'GET' do
         Given(:method) { 'GET' }
         Then do
-          result == [ status.ok, { "Content-Type" => "text/html" }, [ described_class::ABOUT_CONTENT ] ]
+          result == [ status.ok, { "Content-Type" => "text/plain" }, [ described_class::ABOUT_CONTENT ] ]
         end
       end
       context 'POST' do

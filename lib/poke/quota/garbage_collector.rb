@@ -1,8 +1,7 @@
 require 'eventmachine'
-require 'poke/base'
 
 module Poke
-  class Quota < Base
+  class Quota
     class GarbageCollector
 
       PERIOD = 60

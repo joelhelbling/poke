@@ -1,10 +1,11 @@
 require 'spec_helper'
 require 'poke/stash'
+require 'poke/rack_tools'
 
 module Poke
   describe Stash do
-    Given(:status)  { OpenStruct.new Poke::Base::STATUS_MAP }
-    Given(:stash)   { described_class.new                   }
+    Given(:status)  { OpenStruct.new RackTools::STATUS_MAP }
+    Given(:stash)   { described_class.new                  }
 
     Given(:path)    { '/abc123'      }
     Given(:content) { 'some content' }
