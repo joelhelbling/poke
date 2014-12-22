@@ -1,4 +1,6 @@
 require 'eventmachine'
+require 'models/item'
+require 'models/item_meta'
 
 module Poke
   class Quota
@@ -17,11 +19,23 @@ module Poke
         end
 
         def collect_the_garbage
-          puts "The garbage collector is running!"
+          expired_items.each do |item|
+            Item.delete item.id
+            ItemMeta.delete item.id
+          end
         end
 
         def running?
           EM.reactor_running? && @running
+        end
+
+        private
+
+        def expired_items
+          ItemMeta.select do |meta|
+            meta.expires_at <= Time.now ||
+              meta.access_count <= 0
+          end
         end
 
       end
