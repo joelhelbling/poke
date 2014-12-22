@@ -28,9 +28,10 @@ module Poke
     # setup middleware
     Given(:app)   { double }
     Given(:quota) { Quota.new app }
+    Given(:path) { '/el/stuff' }
     Given(:env) do
       {
-        'PATH_INFO'      => '/el/stuff',
+        'PATH_INFO'      => path,
         'REQUEST_METHOD' => method
       }
     end
@@ -38,11 +39,18 @@ module Poke
     When(:result) { quota.call env }
 
     context 'GET' do
+      Given { ItemMeta.create path, expires_at: Time.now + 10000, access_count: 2 }
       Given(:method) { 'GET' }
 
-      Given { expect(app).to receive(:call).with(env)      }
-      Then  { expect(ItemMeta.store).to be_none            }
-      Then  { expect(Token[first_code]).to_not be_accessed }
+      describe 'passes the request on' do
+        Given { expect(app).to receive(:call).with(env)      }
+        Then  { expect(ItemMeta.store.keys.count).to eq(1)   }
+        Then  { expect(Token[first_code]).to_not be_accessed }
+      end
+
+      describe 'decrements the item access count' do
+        Then { ItemMeta[path].access_count == 1 }
+      end
     end
 
     context 'POST' do

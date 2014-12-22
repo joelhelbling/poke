@@ -33,11 +33,18 @@ module Poke
       when req.post?
         process_quota req
       else
+        decrement_access_count req
         @app.call req.env
       end
     end
 
     private
+
+    def decrement_access_count req
+      meta = ItemMeta.find req.path
+      meta.access_count -= 1
+      meta.save
+    end
 
     def process_quota req
       status, headers, content = @app.call req.env
