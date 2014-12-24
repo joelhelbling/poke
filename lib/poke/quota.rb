@@ -21,7 +21,7 @@ module Poke
     DEFAULT_EXPIRE_MINUTES = 60
 
     def initialize app
-      @app             = app
+      @app = app
 
       GarbageCollector.run
     end
@@ -41,9 +41,10 @@ module Poke
     private
 
     def decrement_access_count req
-      meta = ItemMeta.find req.path
-      meta.access_count -= 1
-      meta.save
+      if meta = ItemMeta.find(req.path)
+        meta.access_count -= 1
+        meta.save
+      end
     end
 
     def process_quota req
