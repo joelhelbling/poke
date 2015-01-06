@@ -1,8 +1,8 @@
 require 'rack/request'
 require 'poke/rack_tools'
 require 'poke/quota/garbage_collector'
-require 'models/token_chain_anchor'
-require 'models/token'
+require 'models/quota_anchor'
+require 'models/quota_token'
 require 'models/item_meta'
 
 # A rack middleware which sets the lifespan of incoming items.
@@ -55,8 +55,8 @@ module Poke
 
         auth_token = req.env['HTTP_AUTHORIZATION']
 
-        if auth = Token.find(auth_token)
-          anchor = TokenChainAnchor.find auth.anchor_code
+        if auth = QuotaToken.find(auth_token)
+          anchor = QuotaAnchor.find auth.anchor_code
           expire_minutes = anchor.quota_in_minutes
           auth.accessed = true
           auth.save

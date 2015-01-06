@@ -1,6 +1,6 @@
 require 'squares/base'
 
-class Token < Squares::Base
+class QuotaToken < Squares::Base
   property :predecessor, {}
   property :anchor_code, {}
   property :sequence, {}

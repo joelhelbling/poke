@@ -14,12 +14,12 @@ module Poke
     Given(:first_code)  { chain.generate                            }
 
     Given do
-      TokenChainAnchor.create anchor_code,
+      QuotaAnchor.create anchor_code,
         second_seed: second_seed,
         quota_in_minutes: 24 * 60
     end
     Given do
-      Token.create first_code,
+      QuotaToken.create first_code,
         predecessor:  anchor_code,
         anchor_code:  anchor_code,
         sequence:     1
@@ -45,7 +45,7 @@ module Poke
       describe 'passes the request on' do
         Given { expect(app).to receive(:call).with(env)      }
         Then  { expect(ItemMeta.store.keys.count).to eq(1)   }
-        Then  { expect(Token[first_code]).to_not be_accessed }
+        Then  { expect(QuotaToken[first_code]).to_not be_accessed }
       end
 
       describe 'decrements the item access count' do
@@ -78,7 +78,7 @@ module Poke
       context 'valid token chain' do
         Given { env['HTTP_AUTHORIZATION'] = first_code }
 
-        Then { expect(Token[first_code]).to be_accessed }
+        Then { expect(QuotaToken[first_code]).to be_accessed }
         Then { ItemMeta['/el/stuff'].expires_at == quota_24_hours }
       end
 
