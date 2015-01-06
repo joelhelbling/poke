@@ -43,6 +43,7 @@ GEM
       eventmachine (~> 1.0)
       rack (~> 1.0)
     timecop (0.7.1)
+    token_chain (0.0.2)
 
 PLATFORMS
   ruby
@@ -59,3 +60,4 @@ DEPENDENCIES
   squares
   thin
   timecop
+  token_chain

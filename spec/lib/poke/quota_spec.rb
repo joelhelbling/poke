@@ -10,7 +10,7 @@ module Poke
     Given(:passphrase)  { 'the rain in spain'                       }
     Given(:second_seed) { sha.base64digest passphrase               }
     Given(:anchor_code) { sha.base64digest second_seed + passphrase }
-    Given(:chain)       { TokenChain.new anchor_code                }
+    Given(:chain)       { TokenChain.from_anchor anchor_code        }
     Given(:first_code)  { chain.generate                            }
 
     Given do

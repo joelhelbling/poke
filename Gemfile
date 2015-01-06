@@ -5,6 +5,7 @@ gem 'rake'
 gem 'rack'
 gem 'async-rack'
 gem 'squares'
+gem 'token_chain'
 gem 'thin'
 gem 'leveldb'
 
