@@ -1,24 +1,17 @@
 require 'spec_helper'
-require 'poke/quota'
+require 'poke/enforce_quotas'
 require 'token_chain'
-require 'digest/sha2'
 
 module Poke
-  describe Quota do
+  describe EnforceQuotas do
 
-    Given(:sha)         { Digest::SHA256.new                        }
     Given(:passphrase)  { 'the rain in spain'                       }
-    Given(:second_seed) { sha.base64digest passphrase               }
-    Given(:anchor_code) { sha.base64digest second_seed + passphrase }
-    Given(:chain)       { TokenChain.from_anchor anchor_code        }
+    Given(:chain)       { TokenChain.from_passphrase passphrase     }
+    Given(:anchor_code) { chain.anchor_code                         }
     Given(:first_code)  { chain.generate                            }
 
     Given do
-      QuotaAnchor.create anchor_code,
-        second_seed: second_seed,
-        quota_in_minutes: 24 * 60
-    end
-    Given do
+      Quota.create anchor_code, quota_in_minutes: 24 * 60
       QuotaToken.create first_code,
         predecessor:  anchor_code,
         anchor_code:  anchor_code,
@@ -26,9 +19,9 @@ module Poke
     end
 
     # setup middleware
-    Given(:app)   { double }
-    Given(:quota) { Quota.new app }
-    Given(:path) { '/el/stuff' }
+    Given(:app)      { double                  }
+    Given(:enforcer) { described_class.new app }
+    Given(:path)     { '/el/stuff'             }
     Given(:env) do
       {
         'PATH_INFO'      => path,
@@ -36,7 +29,7 @@ module Poke
       }
     end
 
-    When(:result) { quota.call env }
+    When(:result) { enforcer.call env }
 
     context 'GET' do
       Given { ItemMeta.create path, expires_at: Time.now + 10000, access_count: 2 }

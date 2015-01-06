@@ -1,7 +1,7 @@
 require 'rack/request'
 require 'poke/rack_tools'
-require 'poke/quota/garbage_collector'
-require 'models/quota_anchor'
+require 'poke/enforce_quotas/garbage_collector'
+require 'models/quota'
 require 'models/quota_token'
 require 'models/item_meta'
 
@@ -15,7 +15,7 @@ require 'models/item_meta'
 # but we should probably cap them at x posts per hour.
 
 module Poke
-  class Quota
+  class EnforceQuotas
     include RackTools
 
     DEFAULT_EXPIRE_MINUTES = 60
@@ -56,7 +56,7 @@ module Poke
         auth_token = req.env['HTTP_AUTHORIZATION']
 
         if auth = QuotaToken.find(auth_token)
-          anchor = QuotaAnchor.find auth.anchor_code
+          anchor = Quota.find auth.anchor_code
           expire_minutes = anchor.quota_in_minutes
           auth.accessed = true
           auth.save

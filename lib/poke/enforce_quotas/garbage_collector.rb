@@ -3,7 +3,7 @@ require 'models/item'
 require 'models/item_meta'
 
 module Poke
-  class Quota
+  class EnforceQuotas
     class GarbageCollector
 
       PERIOD = 60

@@ -6,7 +6,7 @@ require 'squares'
 require 'leveldb'
 require 'poke/stash'
 require 'poke/about'
-require 'poke/quota'
+require 'poke/enforce_quotas'
 
 storage_dir = ENV['LEVELDB_STORAGE_DIR'] || './tmp'
 Squares.each do |model|

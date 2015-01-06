@@ -1,9 +1,9 @@
 require 'spec_helper'
-require 'poke/quota/garbage_collector'
+require 'poke/enforce_quotas/garbage_collector'
 require 'models/item'
 require 'models/item_meta'
 
-describe Poke::Quota::GarbageCollector do
+describe Poke::EnforceQuotas::GarbageCollector do
   Given { Item.store     = {} }
   Given { ItemMeta.store = {} }
   Given(:time) { Time.now }
