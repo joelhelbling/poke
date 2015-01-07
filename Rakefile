@@ -24,6 +24,13 @@ namespace :env do
   end
 end
 
+namespace :db do
+  desc "wipe out local data stores"
+  task :reset do
+    `rm -rf tmp/*`
+  end
+end
+
 task default: :spec
 
 
