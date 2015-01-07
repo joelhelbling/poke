@@ -58,7 +58,7 @@ module Poke
         if auth = QuotaToken.find(auth_token)
           anchor = Quota.find auth.anchor_code
           expire_minutes = anchor.quota_in_minutes
-          auth.accessed = true
+          auth.accessed_at = Time.now
           auth.save
         end
 

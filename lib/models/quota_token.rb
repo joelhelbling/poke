@@ -1,10 +1,13 @@
 require 'squares/base'
 
 class QuotaToken < Squares::Base
-  property :predecessor, {}
   property :anchor_code, {}
-  property :sequence, {}
-  property :accessed?, default: false
+  property :accessed_at, {}
 
   alias_method :token, :id
+  alias_method :code, :id
+
+  def accessed?
+    ! accessed_at.nil?
+  end
 end

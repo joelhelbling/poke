@@ -13,9 +13,7 @@ module Poke
     Given do
       Quota.create anchor_code, quota_in_minutes: 24 * 60
       QuotaToken.create first_code,
-        predecessor:  anchor_code,
-        anchor_code:  anchor_code,
-        sequence:     1
+        anchor_code:  anchor_code
     end
 
     # setup middleware
