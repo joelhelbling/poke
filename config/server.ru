@@ -9,4 +9,5 @@ require 'poke'
 
 use Poke::About
 use Poke::EnforceQuotas
+use Poke::QuotaApi
 run Poke.app
