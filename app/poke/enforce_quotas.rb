@@ -42,8 +42,10 @@ module Poke
 
     def decrement_access_count req
       if meta = ItemMeta.find(req.path)
-        meta.access_count -= 1
-        meta.save
+        if meta.limit_accesses?
+          meta.access_count -= 1
+          meta.save
+        end
       end
     end
 
@@ -52,19 +54,28 @@ module Poke
 
       if status == status_code(:created)
         expire_minutes = DEFAULT_EXPIRE_MINUTES
+        access_count = 2
+        limit_accesses = true
 
         auth_token = req.env['HTTP_AUTHORIZATION']
 
-        if auth = QuotaToken.find(auth_token)
-          anchor = Quota.find auth.anchor_code
+        if token = QuotaToken.find(auth_token)
+          anchor = Quota.find token.anchor_code
+
           expire_minutes = anchor.quota_in_minutes
-          auth.accessed_at = Time.now
-          auth.save
+          access_count = anchor.quota_in_accesses
+          limit_accesses = anchor.limit_accesses?
+
+          token.accessed_at = Time.now
+          token.save
         end
 
         expire_time = expire_time_from_minutes expire_minutes
 
-        ItemMeta.create req.path, expires_at: expire_time
+        ItemMeta.create req.path,
+          expires_at: expire_time,
+          access_count: access_count,
+          limit_accesses?: limit_accesses
         content << "\nItem will expire at #{expire_time.utc}"
       end
 

@@ -34,8 +34,8 @@ module Poke
       Given(:path)   { '/quotas' }
       Given(:expected_json) do
         [
-          { 'quota' => 'abc123', :quota_in_minutes => 5*24*60, :max_tokens => 10_000 },
-          { 'quota' => 'def456', :quota_in_minutes => 3*24*60, :max_tokens => 5_000  }
+          { quota: 'abc123', quota_in_minutes: 5*24*60, quota_in_accesses: 5, limit_accesses?: true, max_tokens: 10_000 },
+          { quota: 'def456', quota_in_minutes: 3*24*60, quota_in_accesses: 5, limit_accesses?: true, max_tokens: 5_000  }
         ].to_json
       end
 
@@ -46,7 +46,9 @@ module Poke
       Given(:method) { 'GET' }
       Given(:path)   { '/quotas/abc123' }
       Given(:expected_json) do
-        { 'quota' => 'abc123', :quota_in_minutes => 5*24*60, :max_tokens => 10_000 }.to_json
+        {
+          quota: 'abc123', quota_in_minutes: 5*24*60, quota_in_accesses: 5, limit_accesses?: true, max_tokens: 10_000
+        }.to_json
       end
 
       Then { expect(result[2].first).to eq(expected_json) }

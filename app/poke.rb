@@ -6,6 +6,7 @@ require 'squares'
 require 'leveldb'
 require 'poke/stash'
 require 'poke/about'
+require 'poke/quota_api'
 require 'poke/enforce_quotas'
 
 storage_dir = ENV['LEVELDB_STORAGE_DIR'] || './tmp'
