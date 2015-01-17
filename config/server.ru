@@ -7,6 +7,7 @@ end
 require 'async-rack'
 require 'poke'
 
+use Poke::Log
 use Poke::About
 use Poke::QuotaApi
 use Poke::EnforceQuotas

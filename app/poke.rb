@@ -4,6 +4,8 @@ Dotenv.load
 require 'rack'
 require 'squares'
 require 'leveldb'
+require 'poke/version'
+require 'poke/log'
 require 'poke/stash'
 require 'poke/about'
 require 'poke/quota_api'

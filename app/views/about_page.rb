@@ -1,3 +1,4 @@
+require 'poke/version'
 require 'redcarpet'
 require 'mustache'
 
@@ -6,7 +7,7 @@ class AboutPage < Mustache
   self.template_path = File.dirname(__FILE__)
 
   def version
-    '0.0.1'
+    Poke::VERSION
   end
 
   def dark_brown
