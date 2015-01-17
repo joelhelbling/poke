@@ -14,6 +14,21 @@
     h1, h2 {
       text-transform: uppercase;
     }
+    h2 {
+      text-shadow: {{ light_brown }} 1px 1px 2px;
+    }
+    h3 {
+      stext-shadow: {{ light_brown }} 1px 1px 1px;
+      color: {{ light_brown }};
+    }
+    a {
+      color: {{ light_blue }};
+      text-decoration: none;
+    }
+    a:hover {
+      color: {{ blue }};
+      text-shadow: {{ light_blue }} 1px 1px 22px;
+    }
     header {
       margin: 0 auto;
       width: 100%;
@@ -30,19 +45,25 @@
       width: {{ content_width }};
       margin: 0 auto;
     }
+    footer {
+      margin: 72px auto 0;
+      width: 100%;
+      background: {{ dark_brown }};
+    }
+    footer .copyright {
+      display: block;
+      width: {{ content_width }};
+      color: {{ light_brown }};
+      font-size: 12px;
+      margin: 0 auto;
+      padding: 18px 0;
+      text-align: center;
+    }
     .version {
       font-style: italic;
       color: {{ light_brown }};
       font-size: 14px;
       margin-top: 48px;
-    }
-    a {
-      color: {{ light_blue }};
-      text-decoration: none;
-    }
-    a:hover {
-      color: {{ blue }};
-      text-decoration: underline;
     }
     </style>
 
@@ -59,5 +80,10 @@
 
     <section> {{{ content }}} </section>
 
+    <footer>
+      <span class="copyright">
+      Poke is licenced under the MIT License (MIT).  Copyright &copy; 2014 Joel Helbling.
+      </span>
+    </footer>
   </body>
 </html>

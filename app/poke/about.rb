@@ -41,7 +41,7 @@ module Poke
     end
 
     def about_content
-      load 'views/about_page.rb' if ENV['DEBUG']
+      load 'views/about_page.rb' if ENV['LIVE_RELOAD']
       AboutPage.render
     end
 

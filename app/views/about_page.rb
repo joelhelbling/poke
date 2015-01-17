@@ -42,16 +42,25 @@ class AboutPage < Mustache
   end
 
   def content
-    markdown.render File.read(about_markdown)
+    markdown.render File.read(about_markdown_file)
   end
 
   private
 
   def markdown
-    @markdown ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+    if @markdown.nil? || ENV['LIVE_RELOAD']
+      @markdown = markdown_compiler
+    end
+    @markdown
   end
 
-  def about_markdown
+  def markdown_compiler
+    Redcarpet::Markdown.new Redcarpet::Render::HTML,
+      autolink: true,
+      tables: true
+  end
+
+  def about_markdown_file
     File.join(
       File.dirname(__FILE__),
       '..',
