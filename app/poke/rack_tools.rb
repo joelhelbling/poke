@@ -2,11 +2,12 @@ module Poke
   module RackTools
 
     STATUS_MAP = {
-      ok:           200,
-      created:      201,
-      forbidden:    403,
-      not_found:    404,
-      not_allowed:  405
+      ok:                 200,
+      created:            201,
+      moved_permanently:  301,
+      forbidden:          403,
+      not_found:          404,
+      not_allowed:        405
     }
 
     private

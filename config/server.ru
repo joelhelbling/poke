@@ -8,6 +8,6 @@ require 'async-rack'
 require 'poke'
 
 use Poke::About
-use Poke::EnforceQuotas
 use Poke::QuotaApi
+use Poke::EnforceQuotas
 run Poke.app

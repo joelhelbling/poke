@@ -1,12 +1,10 @@
 require 'rack/request'
 require 'poke/rack_tools'
+require 'views/about_page'
 
 module Poke
   class About
     include RackTools
-
-    WATCHED_PATHS = %w{ / /about }
-    ABOUT_CONTENT = "Poking about?"
 
     def initialize(app)
       @app = app
@@ -15,20 +13,36 @@ module Poke
     def call(env)
       req = Rack::Request.new env
 
-      if WATCHED_PATHS.include? req.path
+      if watched?(req.path)
         render_about req
       else
         @app.call req.env
       end
+    end
 
+    def watched?(path)
+      path.match(/^\/about/) || path == '/'
+    end
+
+    def redirect
+      [ status_code(:moved_permanently), { "Location" => '/about' }, [] ]
     end
 
     def render_about req
       if req.get?
-        render content: ABOUT_CONTENT
+        if req.path == '/about'
+          render content: about_content, content_type: 'text/html'
+        else
+          redirect
+        end
       else
         render status: :not_allowed
       end
+    end
+
+    def about_content
+      load 'views/about_page.rb' if ENV['DEBUG']
+      AboutPage.render
     end
 
   end

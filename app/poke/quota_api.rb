@@ -36,7 +36,7 @@ module Poke
           end
         end
       else
-        decline(req)
+        defer_to_app(req)
       end
     end
 
@@ -53,11 +53,12 @@ module Poke
       end
     end
 
-    def decline(req)
+    def defer_to_app(req)
       @app.call req.env
     end
 
     def all_quotas
+      # paginate?  What kind of support does leveldb have for that?  Or other hashlikes?
       Quota.map{ |quota| payload_for(quota) }.to_json
     end
 

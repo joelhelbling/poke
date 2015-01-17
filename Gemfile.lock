@@ -14,12 +14,14 @@ GEM
     leveldb (0.1.9)
       fiddler-rb (~> 0.1.1)
     method_source (0.8.2)
+    mustache (1.0.0)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
     rack (1.5.2)
     rake (10.1.0)
+    redcarpet (3.2.2)
     rspec (3.1.0)
       rspec-core (~> 3.1.0)
       rspec-expectations (~> 3.1.0)
@@ -52,9 +54,11 @@ DEPENDENCIES
   async-rack
   dotenv
   leveldb
+  mustache
   pry
   rack
   rake
+  redcarpet
   rspec
   rspec-given
   squares

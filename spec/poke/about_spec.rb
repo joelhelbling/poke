@@ -32,14 +32,29 @@ module Poke
     end
 
     describe "watched paths" do
-      Given(:path) { described_class::WATCHED_PATHS.sample }
       context 'GET' do
         Given(:method) { 'GET' }
-        Then do
-          result == [ status.ok, { "Content-Type" => "text/plain" }, [ described_class::ABOUT_CONTENT ] ]
+        context '/about' do
+          Given(:path) { '/about' }
+          Then do
+            result == [ status.ok, { "Content-Type" => "text/html" }, [ about.about_content ] ]
+          end
+        end
+        context '/about/' do
+          Given(:path) { '/about/' }
+          Then do
+            result == [ status.moved_permanently, { "Location" => '/about' }, [] ]
+          end
+        end
+        context '/' do
+          Given(:path) { '/' }
+          Then do
+            result == [ status.moved_permanently, { "Location" => '/about' }, [] ]
+          end
         end
       end
       context 'POST' do
+        Given(:path) { '/' }
         Given(:method) { 'POST' }
         Then { result.first == status.not_allowed }
       end

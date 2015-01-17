@@ -8,6 +8,8 @@ gem 'squares'
 gem 'token_chain'
 gem 'thin'
 gem 'leveldb'
+gem 'mustache'
+gem 'redcarpet'
 
 group :development do
   gem 'pry'
