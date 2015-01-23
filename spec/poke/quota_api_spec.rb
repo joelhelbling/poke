@@ -72,19 +72,34 @@ module Poke
     describe 'PUT /quotas/ghi789' do
       Given(:method) { 'PUT' }
       Given(:path)   { '/quotas/ghi789' }
-      Given(:json_payload) { { quota_in_minutes: 4, max_tokens: 7 }.to_json }
+      Given(:json_payload) do
+        {
+          quota_in_minutes: 4,
+          quota_in_accesses: 12,
+          limit_accesses?: true,
+          max_tokens: 7
+        }.to_json
+      end
       Given { env['rack.input'] = StringIO.new json_payload }
 
       context 'non-preexistant quota' do
         Then { expect(Quota['ghi789']).to_not be_nil }
-        Then { expect(Quota['ghi789']).to eq(Quota.new 'ghi789', quota_in_minutes: 4, max_tokens: 7) }
+        Then { expect(Quota['ghi789'].quota_in_minutes).to eq(4) }
       end
 
       context 'preexistant quota' do
-        Given { Quota.create 'ghi789', quota_in_minutes: 8, max_tokens: 14, last_generated_token: 'c0ff33' }
-        Then  { expect(Quota['ghi789'].quota_in_minutes).to eq(4) }
-        Then  { expect(Quota['ghi789'].max_tokens).to eq(7) }
-        Then  { expect(Quota['ghi789'].last_generated_token).to eq('c0ff33') }
+        Given do
+          Quota.create 'ghi789',
+            quota_in_minutes: 8,
+            limit_accesses?: false,
+            max_tokens: 14,
+            last_generated_token: 'c0ff33'
+        end
+        Then { expect(Quota['ghi789'].quota_in_minutes).to eq(4) }
+        Then { expect(Quota['ghi789'].quota_in_accesses).to eq(12) }
+        Then { expect(Quota['ghi789']).to be_limit_accesses }
+        Then { expect(Quota['ghi789'].max_tokens).to eq(7) }
+        Then { expect(Quota['ghi789'].last_generated_token).to eq('c0ff33') }
       end
     end
 

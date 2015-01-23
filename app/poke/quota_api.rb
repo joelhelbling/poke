@@ -45,8 +45,13 @@ module Poke
     def put_quota(id, params)
       if Quota.key?(id)
         quota = Quota.find id
-        quota.quota_in_minutes = params[:quota_in_minutes]
-        quota.max_tokens = params[:max_tokens]
+
+        # Clean this up by added #update_attributes to Squares!
+        quota.quota_in_minutes  = params[:quota_in_minutes]  if params.has_key?(:quota_in_minutes)
+        quota.quota_in_accesses = params[:quota_in_accesses] if params.has_key?(:quota_in_accesses)
+        quota.limit_accesses    = params[:limit_accesses?]   if params.has_key?(:limit_accesses?)
+        quota.max_tokens        = params[:max_tokens]        if params.has_key?(:max_tokens)
+
         quota.save
       else
         Quota.create id, params
