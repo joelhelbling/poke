@@ -4,8 +4,11 @@ gem 'dotenv'
 gem 'rake'
 gem 'rack'
 gem 'async-rack'
+
 gem 'squares'
 gem 'token_chain'
+gem 'poke-stick'
+
 gem 'thin'
 gem 'leveldb'
 gem 'mustache'

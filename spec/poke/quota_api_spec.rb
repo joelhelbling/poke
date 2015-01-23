@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'models/quota'
 require 'json'
 require 'poke/quota_api'
+require 'rack/mock'
 
 module Poke
   describe QuotaApi do
@@ -10,10 +11,8 @@ module Poke
     Given(:app)    { double }
     Given(:api)    { described_class.new app }
     Given(:env) do
-      {
-        'PATH_INFO'       => path,
+      Rack::MockRequest.env_for "http://localhost:9995#{path}",
         'REQUEST_METHOD' => method
-      }
     end
     Given do
       Quota.create( 'abc123', quota_in_minutes: 5*24*60, max_tokens: 10_000 )

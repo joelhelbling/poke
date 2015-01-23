@@ -13,13 +13,18 @@ GEM
       sorcerer (>= 0.3.7)
     leveldb (0.1.9)
       fiddler-rb (~> 0.1.1)
+    methadone (1.8.0)
+      bundler
     method_source (0.8.2)
     mustache (1.0.0)
+    poke-stick (0.0.1)
+      methadone (~> 1.8.0)
+      rack (~> 1.6.0)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    rack (1.5.2)
+    rack (1.6.0)
     rake (10.1.0)
     redcarpet (3.2.2)
     rspec (3.1.0)
@@ -55,6 +60,7 @@ DEPENDENCIES
   dotenv
   leveldb
   mustache
+  poke-stick
   pry
   rack
   rake
