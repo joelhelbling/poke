@@ -41,7 +41,15 @@ module Poke
 
       context 'item not in datastore' do
         Given { env['rack.input']   = StringIO.new content }
-        Then  { Item[path].content == [ content ] }
+
+        describe 'now stored' do
+          Then { Item[path].content == [ content ] }
+        end
+
+        describe 'response has URL for item' do
+          Given(:path) { '/another_path' }
+          Then { result.last == [ { "itemId" => path, "Content-Type" => 'test/plain' }.to_json ] }
+        end
       end
 
       context 'item is in datastore' do
