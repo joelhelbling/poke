@@ -11,13 +11,13 @@ module Poke
     def call env
       req = Rack::Request.new env
 
-      if debugging
+      if debugging?
         log_request req
       end
 
       status, headers, content = @app.call req.env
 
-      if debugging
+      if debugging?
         log_response status, headers, content
       end
 
@@ -26,7 +26,7 @@ module Poke
 
     private
 
-    def debugging
+    def debugging?
       ENV['LOG_LEVEL'] == 'DEBUG' || ENV['DEBUG']
     end
 
