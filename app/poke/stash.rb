@@ -20,6 +20,8 @@ module Poke
           render status: :not_found
         end
       when req.post?
+        item_id = generate_item_id if item_id == '/item'
+
         if Item.has_key? item_id
           render status: :forbidden
         else
@@ -36,7 +38,11 @@ module Poke
     private
 
     def jsonify(item_id, content_type)
-      { "itemId" => item_id, "Content-Type" => content_type }.to_json
+      { "path" => item_id, "Content-Type" => content_type }.to_json
+    end
+
+    def generate_item_id
+      "/#{SecureRandom.uuid}"
     end
   end
 end
