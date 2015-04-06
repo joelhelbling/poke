@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'models/quota'
 require 'json'
 require 'poke/quota_api'
-require 'rack/mock'
 
 module Poke
   describe QuotaApi do
