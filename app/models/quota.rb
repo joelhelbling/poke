@@ -1,7 +1,9 @@
 require 'squares/base'
 
 class Quota < Squares::Base
-  property :quota_in_minutes, default: 24*60
+  TWENTY_FOUR_HOURS = 24*60
+
+  property :quota_in_minutes, default: TWENTY_FOUR_HOURS
   property :quota_in_accesses, default: 5
   property :limit_accesses?, default: true
   property :max_tokens, default: 1000

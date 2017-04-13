@@ -21,7 +21,7 @@ module Poke
     end
 
     def status_code(status_symbol)
-      status_symbol.is_a?(Fixnum)  ?
+      status_symbol.is_a?(Integer)  ?
         status_symbol              :
         STATUS_MAP[status_symbol]
     end
