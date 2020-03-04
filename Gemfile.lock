@@ -24,8 +24,8 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    rack (1.6.5)
-    rake (12.0.0)
+    rack (1.6.13)
+    rake (13.0.1)
     redcarpet (3.4.0)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
@@ -75,4 +75,4 @@ DEPENDENCIES
   token_chain
 
 BUNDLED WITH
-   1.14.6
+   1.17.2
