@@ -26,7 +26,7 @@ GEM
       slop (~> 3.4)
     rack (1.6.13)
     rake (13.0.1)
-    redcarpet (3.4.0)
+    redcarpet (3.5.1)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
