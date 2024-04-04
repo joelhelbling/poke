@@ -1,6 +1,6 @@
 # Poke
 
-_In the spirit of poke/peek, a rack-based web server._
+_In the spirit of Basic's poke/peek, a rack-based web server._
 
 ## Install
 
