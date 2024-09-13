@@ -7,7 +7,6 @@ gem 'rack', '~> 2.2'
 
 gem 'squares', '~> 0.3.1'
 gem 'token_chain'
-gem 'poke-stick'
 
 gem 'thin', '~> 1.8'
 gem 'lmdb', '~> 0.6'
