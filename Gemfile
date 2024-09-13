@@ -4,7 +4,6 @@ gem 'bundler', '~> 2.5.18'
 gem 'dotenv', '~> 2.8'
 gem 'rake', '~> 13.0'
 gem 'rack', '~> 2.2'
-gem 'async-rack', '~> 0.9'
 
 gem 'squares', '~> 0.3.1'
 gem 'token_chain'
