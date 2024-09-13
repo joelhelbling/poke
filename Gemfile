@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'bundler', '~> 2.5.18'
 gem 'dotenv'
 gem 'rake'
 gem 'rack'
