@@ -1,6 +1,0 @@
----
-environment: development
-port: 9995
-daemonize: false
-log: ./tmp/thin.log
-rackup: ./config/server.ru

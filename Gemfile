@@ -8,7 +8,7 @@ gem 'rack', '~> 2.2'
 gem 'squares', '~> 0.3.1'
 gem 'token_chain'
 
-gem 'thin', '~> 1.8'
+gem 'puma', '~> 5.6'
 gem 'lmdb', '~> 0.6'
 gem 'mustache', '~> 1.1'
 gem 'redcarpet', '~> 3.6'

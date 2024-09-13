@@ -6,23 +6,24 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   t.rspec_opts = " --format doc"
 end
 
-namespace :thin do
-  desc "start the server"
+namespace :puma do
+  desc "Start the Puma server"
   task :start => :dotenv do
-    sh "thin start -C ./config/thin.yml"
+    sh "puma -C ./config/puma.rb"
+  end
+
+  desc "Stop the Puma server"
+  task :stop do
+    sh "pumactl -F ./config/puma.rb stop"
+  end
+
+  desc "Restart the Puma server"
+  task :restart do
+    sh "pumactl -F ./config/puma.rb restart"
   end
 end
 
-task thin: :"thin:start"
-
-namespace :env do
-  namespace :hydrate do
-    desc "hydrate configs for development environment"
-    task :development do
-      sh "cp config/thin.yml.development config/thin.yml"
-    end
-  end
-end
+task server: :"puma:start"
 
 namespace :db do
   desc "wipe out local data stores"
