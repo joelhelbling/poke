@@ -10,7 +10,7 @@ gem 'token_chain'
 gem 'poke-stick'
 
 gem 'thin'
-gem 'leveldb'
+gem 'lmdb'
 gem 'mustache'
 gem 'redcarpet'
 
