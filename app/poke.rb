@@ -2,7 +2,6 @@ require 'dotenv'
 Dotenv.load
 
 require 'rack'
-# Remove any require 'async-rack' if it exists
 require 'squares'
 require 'lmdb'
 require 'poke/version'

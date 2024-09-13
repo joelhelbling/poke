@@ -1,5 +1,4 @@
 require 'rack/request'
-require 'lmdb'
 require 'poke/rack_tools'
 require 'models/item'
 require 'json'

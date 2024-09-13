@@ -1,3 +1,4 @@
 config/thin.yml
 tmp/*
 .env
+.aider*
