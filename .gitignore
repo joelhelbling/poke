@@ -2,3 +2,7 @@ config/thin.yml
 tmp/*
 .env
 .aider*
+# Puma server files
+/tmp/pids/
+/log/puma.stdout.log
+/log/puma.stderr.log
