@@ -2,6 +2,7 @@ require 'rack/request'
 require 'poke/rack_tools'
 require 'models/item'
 require 'json'
+require 'securerandom'
 
 module Poke
   class Stash

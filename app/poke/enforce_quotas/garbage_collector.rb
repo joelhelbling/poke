@@ -1,21 +1,20 @@
-require 'eventmachine'
 require 'models/item'
 require 'models/item_meta'
 
 module Poke
   class EnforceQuotas
     class GarbageCollector
-
       PERIOD = 60
 
       class << self
         def run
-          EM.schedule do
-            EM.add_periodic_timer(PERIOD) do
+          Thread.new do
+            loop do
               collect_the_garbage
+              sleep PERIOD
             end
-            @running = true
           end
+          @running = true
         end
 
         def collect_the_garbage
@@ -26,7 +25,7 @@ module Poke
         end
 
         def running?
-          EM.reactor_running? && @running
+          @running
         end
 
         private
@@ -37,7 +36,6 @@ module Poke
               meta.access_count <= 0
           end
         end
-
       end
     end
   end

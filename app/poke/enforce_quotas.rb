@@ -24,6 +24,7 @@ module Poke
       @app = app
 
       GarbageCollector.run
+      TokenReplentisher.run
     end
 
     def call env
